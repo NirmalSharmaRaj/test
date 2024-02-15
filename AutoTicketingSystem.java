@@ -4,6 +4,15 @@ public class AutoTicketingSystem {
 
     private static String[][] parkingLot = null;
 
+    private enum Commands {
+        create_parking_lot,
+        park,
+        leave,
+        status,
+        registration_numbers_for_cars_with_colour,
+        slot_numbers_for_cars_with_colour
+    }
+
     private static void createParkingLot(int numberOfSlots) {
         String[][] parkingLotNew = new String[numberOfSlots][2];
         parkingLot = parkingLotNew;
@@ -67,22 +76,27 @@ public class AutoTicketingSystem {
             String command = tokens[0];
 
             try {
+                Commands.valueOf(command);
+            } catch (IllegalArgumentException e) {
+                System.err.println("Error! invalid command");
+                continue;
+            }
 
-                if (command.equals("create_parking_lot")) {
+            try {
+
+                if (command.equals(Commands.create_parking_lot.toString())) {
                     createParkingLot(Integer.valueOf(tokens[1]));
 
                 } else if (parkingLot == null) {
                     System.out.println("Parking lot is not created");
-                } else if (command.equals("park")) {
+                } else if (command.equals(Commands.park.toString())) {
                     park(tokens[1], tokens[2]);
-                } else if (command.equals("leave")) {
+                } else if (command.equals(Commands.leave.toString())) {
                     leave(Integer.valueOf(tokens[1]));
-                } else if (command.equals("status")) {
+                } else if (command.equals(Commands.status.toString())) {
                     status();
-                } else if (command.equals("registration_numbers_for_cars_with_colour")) {
+                } else if (command.equals(Commands.slot_numbers_for_cars_with_colour.toString())) {
                     registrationNumbersForCarsWithColour(tokens[1]);
-                } else {
-                    System.err.println("Error! invalid command");
                 }
             } catch (IndexOutOfBoundsException e) {
                 System.err.println("Invalid Input");
